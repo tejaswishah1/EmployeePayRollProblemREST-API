@@ -20,7 +20,7 @@ namespace RestSharpTest
         /// <summary>
         /// Salary of employee
         /// </summary>
-            public double Salary { get; set; }
+            public string Salary { get; set; }
         }
     }
 
