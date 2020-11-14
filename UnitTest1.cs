@@ -86,33 +86,61 @@ namespace RestSharpTest
         /// UC3
         /// Tests the add multiple entries. POST
         /// </summary>
-        [TestMethod]
-        public void TestAddMultipleEntriesUsingPostOperation()
-        {
-           ////Add multiple entries
-           ////Created a list
-            List<Employee> employeeList = new List<Employee>();
-            employeeList.Add(new Employee { name = "Girish", Salary = "40000" });
-            employeeList.Add(new Employee { name = "Harsh", Salary = "50000" });
-            
-            foreach (Employee employee in employeeList)
-            {
-                ////Used post method to add Data.
-                ////"/employees" will append to the url
-                RestRequest request = new RestRequest("/employees", Method.POST);
-                JObject jObject = new JObject();
-                jObject.Add("name", employee.name);
-                jObject.Add("salary", employee.Salary);
-                request.AddParameter("application/json", jObject, ParameterType.RequestBody);
-                IRestResponse response = client.Execute(request);
-                //Assert
-                Assert.AreEqual(response.StatusCode, HttpStatusCode.Created);
-                //derserializing object for assert and checking test case
-                Employee dataResponse = JsonConvert.DeserializeObject<Employee>(response.Content);
-                Assert.AreEqual(employee.name, dataResponse.name);
-            }
-        }
+        //[TestMethod]
+        //public void TestAddMultipleEntriesUsingPostOperation()
+        //{
+        //   ////Add multiple entries
+        //   ////Created a list
+        //    List<Employee> employeeList = new List<Employee>();
+        //    employeeList.Add(new Employee { name = "Girish", Salary = "40000" });
+        //    employeeList.Add(new Employee { name = "Harsh", Salary = "50000" });
 
+        //    foreach (Employee employee in employeeList)
+        //    {
+        //        ////Used post method to add Data.
+        //        ////"/employees" will append to the url
+        //        RestRequest request = new RestRequest("/employees", Method.POST);
+        //        JObject jObject = new JObject();
+        //        jObject.Add("name", employee.name);
+        //        jObject.Add("salary", employee.Salary);
+        //        request.AddParameter("application/json", jObject, ParameterType.RequestBody);
+        //        IRestResponse response = client.Execute(request);
+        //        //Assert
+        //        Assert.AreEqual(response.StatusCode, HttpStatusCode.Created);
+        //        //derserializing object for assert and checking test case
+        //        Employee dataResponse = JsonConvert.DeserializeObject<Employee>(response.Content);
+        //        Assert.AreEqual(employee.name, dataResponse.name);
+        //    }
+        //}
+
+
+        /// <summary>
+        /// UC4
+        ////Update salary using PUT operation
+        /// </summary>
+        [TestMethod]
+        public void TestUpdateDataUsingPutOperation()
+        {
+            ////Request to update data of an employee
+            RestRequest request = new RestRequest("employees/3", Method.PUT);
+           ////Creating object to update data
+            JObject jobject = new JObject();
+            ////Updating name
+            jobject.Add("name", "Tejaswi");
+            jobject.Add("salary", "300000");
+            //adding parameters in request
+            //request body parameter type signifies values added using add.
+            request.AddParameter("application/json", jobject, ParameterType.RequestBody);
+            //executing request using client
+            //IRest response act as a container for the data sent back from api.
+            IRestResponse response = client.Execute(request);
+            //checking status code of response
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
+            //deserializing content added in json file
+            Employee dataResponse = JsonConvert.DeserializeObject<Employee>(response.Content);
+            //asserting for salary
+            Assert.AreEqual(dataResponse.Salary, "300000");
+        }
 
 
     } 
